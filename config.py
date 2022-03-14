@@ -1,7 +1,7 @@
 
 class default_settings ():
     def __init__(self):
-        self.main_path='../main/'
+        self.main_path='E:/GitHub/Thesis/'
     def importer(self):
         from config import default_settings
         from joblib import Parallel, delayed, parallel_backend

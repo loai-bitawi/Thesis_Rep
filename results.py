@@ -13,7 +13,8 @@ class result():
     def __init__(self,dataset,flag):
         self.main_path=default_settings().main_path
         self.rel=json.loads(open(self.main_path+dataset+'/'+'rel.txt').read())
-        self.d_list=list(json.loads(open(self.main_path+dataset+'/'+'docs.txt').read()).keys())
+        self.d_list=json.loads(open(self.main_path+dataset+'/'+'docs.txt').read())
+        self.d_list=list(self.d_list['dict'].keys())
         self.res=json.loads(open(self.main_path+dataset+'/'+'results_'+flag+'.txt').read())
         self.queries=json.loads(open(self.main_path+dataset+'/'+'qrs.txt').read())
         

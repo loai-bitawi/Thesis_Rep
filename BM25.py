@@ -14,6 +14,7 @@ class BM25():
         self.rel=json.loads(open(self.main_path+dataset+'/'+'rel.txt').read())
         self.nlp = spacy.load("en_core_web_sm")
         self.docs=json.loads(open(self.main_path+dataset+'/'+'docs.txt').read())
+        self.docs=self.docs['dict']
         self.docs=[str(i) for i in list(self.docs.keys())]
         self.d_list=self.docs
         self.all_docs,self.queries,_= data_parser().parser(dataset)

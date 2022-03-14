@@ -12,6 +12,7 @@ class mean_of_embedding():
     def __init__(self,dataset):
         self.main_path=default_settings().main_path
         self.docs=json.loads(open(self.main_path+dataset+'/'+'docs.txt').read())
+        self.docs=self.docs['dict']
         self.qrs=json.loads(open(self.main_path+dataset+'/'+'qrs.txt').read())
         self.special_char = '@ _ ! # $ % ^ & * ( ) < > ? / \ | } { ~ : ; [ ] - . , '
         self.special_char = self.special_char.split()

@@ -20,12 +20,13 @@ class distances():
         self.q_vecs, self.q_lens =self.query_vecs()
         self.flag='Euclidean'
         self.docs=json.loads(open(self.main_path+file_name).read())
+        self.docs=self.docs['dict']
 
     def retreival(self,source,key):
         words=[]
         vecs=[]
         for i, word in enumerate(source[key][0]):
-            if word not in ENGLISH_STOP_WORDS and word not in self.special_char and word not in ["'",'"'] and '#' not in word:
+            #if word not in ENGLISH_STOP_WORDS and word not in self.special_char and word not in ["'",'"'] and '#' not in word:
                 words.append(word)
                 vecs.append(source[key][1][i])
         return words, np.array(vecs)
@@ -83,3 +84,6 @@ class distances():
             i+=1
         with open(self.main_path+"chunks_"+self.flag+".txt", "w") as file:
              file.write(json.dumps(ch)) 
+             
+x=distances('E:/GitHub/Thesis/lisa/','docs.txt')
+x.runner('Euclidean')

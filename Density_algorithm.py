@@ -29,6 +29,7 @@ class density():
         self.special_char.extend(['[CLS]','[SEP]','[UNK]'])
         self.flag=flag
         self.docs=json.loads(open(self.main_path+dataset+'/'+filename).read())
+        self.docs=self.docs['dict']
         self.queries=json.loads(open(self.main_path+dataset+'/'+'qrs.txt').read())
         sub=os.listdir(self.main_path+self.dataset+'/')        
         files=[i for i in sub if len(re.findall('\d\w\w*.npy', i))>0] 
