@@ -10,23 +10,29 @@ import concurrent.futures
 
 
 class distances():
-    def __init__(self,main_path,file_name):
+    def __init__(self,main_path,file_name,dataset,stop_words='True',subfile=''):
+        self.subfile=subfile
+        self.stop_words=stop_words
         self.file_name= file_name
         self.main_path=main_path
         self.queries=json.loads(open(main_path+'qrs.txt').read())
+        self.queries={'4':self.queries['4']}      #########################################
         self.special_char = '@ _ ! # $ % ^ & * ( ) < > ? / \ | } { ~ : ; [ ] - . , '
         self.special_char = self.special_char.split()
         self.special_char.extend(['[CLS]','[SEP]','[UNK]'])
         self.q_vecs, self.q_lens =self.query_vecs()
         self.flag='Euclidean'
-        self.docs=json.loads(open(self.main_path+file_name).read())
-        self.docs=self.docs['dict']
+        self.docs=dataset
 
     def retreival(self,source,key):
         words=[]
         vecs=[]
         for i, word in enumerate(source[key][0]):
-            #if word not in ENGLISH_STOP_WORDS and word not in self.special_char and word not in ["'",'"'] and '#' not in word:
+            if self.stop_words:
+                if word not in ENGLISH_STOP_WORDS and word not in self.special_char and word not in ["'",'"'] and '#' not in word:
+                    words.append(word)
+                    vecs.append(source[key][1][i])
+            else:
                 words.append(word)
                 vecs.append(source[key][1][i])
         return words, np.array(vecs)
@@ -74,16 +80,16 @@ class distances():
         i=0
         for chunk in tqdm(self.chunks):
             doc_mats=self.run_dist(chunk,job_type,njobs)
-            np.save(self.main_path+'/'+str(i)+self.flag+".npy",doc_mats)
+            np.save(self.main_path+'/'+self.subfile+'/'+str(i)+self.flag+".npy",doc_mats)
             doc_mats=None
             i+=1        
         ch={}
         i=0
         for chunk in tqdm(self.chunks):
-            ch[self.main_path+str(i)+self.flag+".npy"]=chunk
+            ch[self.main_path+self.subfile+'/'+str(i)+self.flag+".npy"]=chunk
             i+=1
-        with open(self.main_path+"chunks_"+self.flag+".txt", "w") as file:
+        with open(self.main_path+'/'+self.subfile+'/'+"chunks_"+self.flag+".txt", "w") as file:
              file.write(json.dumps(ch)) 
              
-x=distances('E:/GitHub/Thesis/lisa/','docs.txt')
-x.runner('Euclidean')
+# x=distances('E:/GitHub/Thesis/lisa/','docs.txt')
+# x.runner('Euclidean')

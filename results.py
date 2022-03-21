@@ -13,11 +13,13 @@ class result():
     def __init__(self,dataset,flag):
         self.main_path=default_settings().main_path
         self.rel=json.loads(open(self.main_path+dataset+'/'+'rel.txt').read())
-        self.d_list=json.loads(open(self.main_path+dataset+'/'+'docs.txt').read())
-        self.d_list=list(self.d_list['dict'].keys())
+        self.d_list=json.loads(open(self.main_path+dataset+'/'+'d_list.txt').read())
+#        self.d_list=list(self.d_list['dict'].keys())
         self.res=json.loads(open(self.main_path+dataset+'/'+'results_'+flag+'.txt').read())
         self.queries=json.loads(open(self.main_path+dataset+'/'+'qrs.txt').read())
-        
+ #       self.queries={'4':self.queries['4']}   ##################################################
+ #       self.d_list=list(json.loads(open(self.main_path+dataset+'/'+'sample27.txt').read()).keys()) ################
+       
     def crawler(self,q):
         result={}
         for file in (self.res.keys()):
@@ -35,7 +37,7 @@ class result():
             temp=[]
             ind=[]
             for q in self.queries.keys():
-                relevance=self.rel[q]
+                relevance=[str(i) for i in self.rel[q]]
                 result=self.crawler(q)
                 sorted_y_pred= sorted(result.items(), key=lambda x: x[1], reverse=False)
                 sorted_result=[str(i[0]) for i in sorted_y_pred]
@@ -64,3 +66,5 @@ class result():
             data_plot2=data_plot[data_plot['Top J']==j].agg(['mean'])
             agg_scores=pd.concat((agg_scores,data_plot2.reset_index()))
         return scores,agg_scores
+r=result('lisa','Euclidean')
+rr=r.scores()

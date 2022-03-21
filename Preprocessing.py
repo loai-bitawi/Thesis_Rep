@@ -30,6 +30,8 @@ class preprocessing():
              file.write(json.dumps(vec_qr))
         with open(main_path+'rel.txt', 'w') as file:
               file.write(json.dumps(rel_ass))
+        with open(main_path+'d_list.txt', 'w') as file:
+              file.write(json.dumps(doc_vecs.keys()))
 
     def embedder(self,docs,queries,rel_ass,stop_words):
         vec_docs={}
