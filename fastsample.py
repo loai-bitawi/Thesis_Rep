@@ -10,6 +10,15 @@ import json
 import ijson
 
 data = ijson.parse(open('E:/GitHub/Thesis/Lisa/docs.txt', 'r'))
+keys=[]
+for prefix, event, value in data:
+    if event=='map_key':
+       keys.append(str(value))
+keys={'dict':keys}
+with open('E:/GitHub/Thesis/Lisa/d_list.txt','w') as f:
+    f.write(json.dumps(keys))
+
+
 sample=list(json.loads(open('E:/GitHub/Thesis/Lisa/Sample_docs_q4_27smpl.txt').read()).keys())
 sample=json.loads(open('E:/GitHub/Thesis/Lisa/sample1042.txt').read()).keys()
 # sample=sample.replace(',','').replace('[','').replace(']','').replace(' ','')

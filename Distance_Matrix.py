@@ -16,7 +16,7 @@ class distances():
         self.file_name= file_name
         self.main_path=main_path
         self.queries=json.loads(open(main_path+'qrs.txt').read())
-        self.queries={'4':self.queries['4']}      #########################################
+        #self.queries={'4':self.queries['4']}      #########################################
         self.special_char = '@ _ ! # $ % ^ & * ( ) < > ? / \ | } { ~ : ; [ ] - . , '
         self.special_char = self.special_char.split()
         self.special_char.extend(['[CLS]','[SEP]','[UNK]'])
@@ -90,6 +90,14 @@ class distances():
             i+=1
         with open(self.main_path+'/'+self.subfile+'/'+"chunks_"+self.flag+".txt", "w") as file:
              file.write(json.dumps(ch)) 
-             
-# x=distances('E:/GitHub/Thesis/lisa/','docs.txt')
+ 
+# dataset=json.loads(open('E:/GitHub/Thesis/lisa/sample27.txt').read())
+# dataset=dataset['dict']
+# x=distances('E:/GitHub/Thesis/lisa/','sample27.txt',dataset=dataset,stop_words=True)
 # x.runner('Euclidean')
+
+# y=np.load('E:/GitHub/Thesis/lisa/0Euclidean.npy',allow_pickle=True)
+
+# z=x.q_vecs
+# len(x.retreival(dataset,'243')[0])
+

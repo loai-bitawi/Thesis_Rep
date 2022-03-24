@@ -74,17 +74,24 @@ class density():
         return ar[k-1]
 
     def TFIDF(self):
+        sub=os.listdir(self.main_path+self.dataset+'/'+self.subfile+'/')        
+        files=[i for i in sub if len(re.findall('TFIDF.csv', i))>0] 
         docs_list=[]
-        for i in self.docs.keys():
-            docs_list.append(" ".join(self.docs[i][0]))
-        doc_tk=json.loads(open(self.main_path+self.dataset+'/'+'doc_tokens_all.txt').read())
-        vectorizer = TfidfVectorizer(token_pattern='\w\w*')
-        vectors = vectorizer.fit_transform(docs_list)
-        feature_names = vectorizer.get_feature_names()
-        dense = vectors.todense()
-        denselist = dense.tolist()
-        self.tf_idf = pd.DataFrame(denselist, columns=feature_names,index=list(doc_tk.keys()))
-        self.tf_idf.to_csv(self.main_path+self.dataset+'/'+'TFIDF.csv')
+        if len(files)==0:
+            for i in self.docs.keys():
+                docs_list.append(" ".join(self.docs[i][0]))
+            doc_tk=json.loads(open(self.main_path+self.dataset+'/'+'doc_tokens_all.txt').read())
+            if self.stop_words:
+                doc_tk={str(i):[j for j in doc_tk[i] if j not in ENGLISH_STOP_WORDS and j not in self.special_char and j not in ["'",'"'] and '#' not in j] for i in self.docs.keys()} ###########
+            else:
+                doc_tk={str(i):doc_tk[i]  for i in self.docs.keys()} ###########
+            vectorizer = TfidfVectorizer(token_pattern='\w\w*')
+            vectors = vectorizer.fit_transform(docs_list)
+            feature_names = vectorizer.get_feature_names()
+            dense = vectors.todense()
+            denselist = dense.tolist()
+            self.tf_idf = pd.DataFrame(denselist, columns=feature_names,index=list(doc_tk.keys()))
+            self.tf_idf.to_csv(self.main_path+self.dataset+'/'+'TFIDF.csv')
         self.tf_idf=pd.read_csv(self.main_path+self.dataset+'/'+'TFIDF.csv') 
         self.tf_idf.index=self.tf_idf['Unnamed: 0'].astype(str)
     
@@ -129,14 +136,14 @@ class density():
                             if self.tf_idf.loc[doc_name][q_words[l-d]]>0:
                                 ##Used to test the normalization effect 
                                 #match_qr.append(lof/tf_idf.loc[int(doc_name)][q_words[l-d]]*(1+math.log(len(docs[doc_name]),10))) 
-                                #match_qr.append(lof/self.tf_idf.loc[doc_name][q_words[l-d]])    
-                                match_qr.append(lof)    
+                                match_qr.append(lof/self.tf_idf.loc[doc_name][q_words[l-d]])    
+                                #match_qr.append(lof)    
         
                             else: 
                                 ##Used to test the normalization effect 
                                 #match_qr.append(lof/0.00001*(1+math.log(len(docs[doc_name]),10)))
-                                #match_qr.append(lof/0.00001)
-                                match_qr.append(lof)
+                                match_qr.append(lof/0.00001)
+                                #match_qr.append(lof)
                         else:  
                             ##Used to test the normalization effect 
                             #match_qr.append(lof*(1+math.log(len(docs[doc_name]),10)))
@@ -152,8 +159,6 @@ class density():
         doc_name=matt[0]
         d=len(m)-sum(self.q_lens)
         k_match={}
-        if d>=10: it=10
-        else: it=d
         k=d
         q_lofs={}
         for q_i,q in enumerate(self.queries.keys()):
@@ -188,14 +193,14 @@ class density():
                         if self.tf_idf.loc[doc_name][q_words[l-d]]>0:
                             ##Used to test the normalization effect 
                             #match_qr.append(lof/tf_idf.loc[int(doc_name)][q_words[l-d]]*(1+math.log(len(docs[doc_name]),10))) 
-                            #match_qr.append(lof/self.tf_idf.loc[doc_name][q_words[l-d]])    
-                            match_qr.append(lof)    
+                            match_qr.append(lof/self.tf_idf.loc[doc_name][q_words[l-d]])    
+                            #match_qr.append(lof)    
     
                         else: 
                             ##Used to test the normalization effect 
                             #match_qr.append(lof/0.00001*(1+math.log(len(docs[doc_name]),10)))
-                            #match_qr.append(lof/0.00001)
-                            match_qr.append(lof)
+                            match_qr.append(lof/0.00001)
+                            #match_qr.append(lof)
                     else:  
                         ##Used to test the normalization effect 
                         #match_qr.append(lof*(1+math.log(len(docs[doc_name]),10)))
@@ -262,3 +267,9 @@ class density():
         print('Elapsed time:', str(end - start),'Seconds')  
         with open(self.main_path+self.dataset+'/'+'results_'+self.flag+'.txt', 'w') as file:
              file.write(json.dumps(results)) 
+
+
+
+# x=density(dataset='lisa',flag='Euclidean',filename='sample27.txt',stp_words=True,
+#           tfidf_flag=True,hybrid=False,old=True).runner()
+

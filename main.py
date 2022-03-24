@@ -38,7 +38,7 @@ class main():
             self.algorithm=density(flag=flag,dataset=dataset,filename=filename,stop_words=stop_words)
             self.algorithm.runner(job_type=job_type,njobs=njobs,topj=topj)            
             print('Ranking Finished')
-        res=result(dataset=dataset,flag=flag)
+        res=result(dataset=dataset,flag=flag,old=old)
         scores,aggrigated_scores=res.scores()
         return scores,aggrigated_scores
     
@@ -67,19 +67,24 @@ class main():
 
 
 
-x=main()
-scores,aggrigated_scores= x.run_main(dataset='lisa',flag='Euclidean',filename='sample27.txt',stop_words=True,preprocessing=False,tfidf_flag=False,hybrid=False,old=True) 
-scores.to_excel(x.main_path+'/lisa/'+'scores_euclidean_with stp wrds rmvl_sample1.xlsx')
-aggrigated_scores.to_excel(x.main_path+'/lisa/'+'aggrigated_scores_euclidean_with stp wrds rmv_sample1.xlsx')
-
-
-#!!!! change density calculation (add tfidf)
-x=main()
-scores,aggrigated_scores= x.run_main(dataset='cranfield',flag='Euclidean',filename='docs.txt',stop_words=True,preprocessing=True,hybrid=False) 
-scores.to_excel(x.main_path+'/cranfield/'+'scores_no hybrid.xlsx')
-aggrigated_scores.to_excel(x.main_path+'/cranfield/'+'aggrigated_scores_no hybrid.xlsx')
+# x=main()
+# scores,aggrigated_scores= x.run_main(dataset='lisa',flag='Euclidean',filename='sample27.txt',stop_words=True,preprocessing=False,tfidf_flag=False,hybrid=False,old=True) 
+# scores.to_excel(x.main_path+'/lisa/'+'scores_euclidean_with stp wrds rmvl_sample1.xlsx')
+# aggrigated_scores.to_excel(x.main_path+'/lisa/'+'aggrigated_scores_euclidean_with stp wrds rmv_sample1.xlsx')
 
 x=main()
-scores,aggrigated_scores= x.run_main(dataset='cranfield',flag='Euclidean',filename='docs.txt',stop_words=True,preprocessing=True,hybrid=True) 
-scores.to_excel(x.main_path+'/cranfield/'+'scores_no hybrid.xlsx')
-aggrigated_scores.to_excel(x.main_path+'/cranfield/'+'aggrigated_scores_no hybrid.xlsx')
+scores,aggrigated_scores= x.run_main(dataset='lisa',flag='Euclidean',filename='docs.txt',stop_words=True,preprocessing=False,tfidf_flag=False,hybrid=False,old=True)
+scores.to_excel(x.main_path+'/lisa/'+'scores_euclidean_with stp wrds rmvl.xlsx')
+aggrigated_scores.to_excel(x.main_path+'/lisa/'+'aggrigated_scores_euclidean_with stp wrds rmv.xlsx')
+
+
+# #!!!! change density calculation (add tfidf)
+# x=main()
+# scores,aggrigated_scores= x.run_main(dataset='cranfield',flag='Euclidean',filename='docs.txt',stop_words=True,preprocessing=True,hybrid=False) 
+# scores.to_excel(x.main_path+'/cranfield/'+'scores_no hybrid.xlsx')
+# aggrigated_scores.to_excel(x.main_path+'/cranfield/'+'aggrigated_scores_no hybrid.xlsx')
+
+# x=main()
+# scores,aggrigated_scores= x.run_main(dataset='cranfield',flag='Euclidean',filename='docs.txt',stop_words=True,preprocessing=True,hybrid=True) 
+# scores.to_excel(x.main_path+'/cranfield/'+'scores_no hybrid.xlsx')
+# aggrigated_scores.to_excel(x.main_path+'/cranfield/'+'aggrigated_scores_no hybrid.xlsx')
